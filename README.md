@@ -24,7 +24,7 @@ This is an example of using AI to AI AIs so you can AI.
 ```
 $ sudo apt install libgtk2.0-dev
 $ sudo apt search libgtk2.0-dev
-[Optional] cmake-3.17 if needed
+[Optional] install cmake-3.17 if needed
 $ bash scripts/install_cmake.sh
 ```
 
@@ -45,7 +45,6 @@ $ bash scripts/make2gbswap.sh
 ## Example Run
 * CPU:
 ```
-$ export LD_LIBRARY_PATH=libedgetpu/direct/{CPU}
 $ bin/{CPU}/edge --model_path test_data/mobilenet_ssd_v2_coco_quant_postprocess.tflite --label_path test_data/coco_labels.txt --height 480 --width 640
 ```
 
