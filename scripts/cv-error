@@ -1,0 +1,6 @@
+OpenCV Error: Unspecified error (The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script) in cvShowImage, file /home/pi/edgetpu-tflite-cv/build/opencv/modules/highgui/src/window.cpp, line 605
+terminate called after throwing an instance of 'cv::Exception'
+  what():  /home/pi/edgetpu-tflite-cv/build/opencv/modules/highgui/src/window.cpp:605: error: (-2) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function cvShowImage
+
+$ sudo apt install libgtk2.0-dev
+$ sudo apt search libgtk2.0-dev 

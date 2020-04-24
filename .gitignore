@@ -1,0 +1,5 @@
+*.swp
+build
+.clang-format
+bin
+*cmake*
