@@ -71,6 +71,13 @@ Usage:
       --help              Print Usage
 ```
 
+## Python
+In case you didn't know, you can write this entire project in python with 71 lines of python...
+```
+$ export LD_LIBRARY_PATH=libedgetpu/direct/{CPU}
+$ python3 scripts/camera_detector.py --model test_data/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite --labels test_data/coco_labels.txt --edgetpu True
+```
+
 ## Credits
 Huge thanks to the following repos:
 * [google-coral/edgetpu](https://github.com/google-coral/edgetpu) taught me how to run inference in c++
