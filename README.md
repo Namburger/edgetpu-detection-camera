@@ -73,6 +73,13 @@ Usage:
 
 ## Python
 In case you didn't know, you can write this entire project in python with 71 lines of python...
+**Notes:** Requires installation of [tflite_runtime-2.1.0.post1](https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter)
+
+* Run with CPU:
+```
+$ python3 scripts/camera_detector.py --model test_data/mobilenet_ssd_v2_coco_quant_postprocess.tflite --labels test_data/coco_labels.txt
+```
+* Run with TPU:
 ```
 $ export LD_LIBRARY_PATH=libedgetpu/direct/{CPU}
 $ python3 scripts/camera_detector.py --model test_data/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite --labels test_data/coco_labels.txt --edgetpu True
