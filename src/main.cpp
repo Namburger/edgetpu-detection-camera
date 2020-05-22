@@ -17,7 +17,8 @@
 #include "tflite_wrapper.h"
 
 cxxopts::ParseResult parse_args(int argc, char** argv) {
-  cxxopts::Options options("edge_tflite_cv", "An example of using opencv with tflite/edgetpu in c++.");
+  cxxopts::Options options(
+      "edge_tflite_cv", "An example of using opencv with tflite/edgetpu in c++.");
   // clang-format off
   options.add_options()
     ("model_path", "Path to .tflite model_file", cxxopts::value<std::string>())

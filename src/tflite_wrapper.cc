@@ -84,23 +84,24 @@ const std::vector<InferenceResult> TfLiteWrapper::GetResults(
 
 const std::vector<InferenceResult> TfLiteWrapper::RunInference(
     const std::vector<uint8_t>& input_data) {
-  std::vector<float> output_data;
+  std::vector<std::vector<float>> output_data;
   uint8_t* input = m_interpreter->typed_input_tensor<uint8_t>(0);
   std::memcpy(input, input_data.data(), input_data.size());
   m_interpreter->Invoke();
 
   const auto& output_indices = m_interpreter->outputs();
-  const int num_outputs = output_indices.size();
-  int out_idx = 0;
-  for (int i = 0; i < num_outputs; ++i) {
+  const size_t num_outputs = output_indices.size();
+  output_data.resize(num_outputs);
+  for (size_t i = 0; i < num_outputs; ++i) {
     const auto* out_tensor = m_interpreter->tensor(output_indices[i]);
     assert(out_tensor != nullptr);
     if (out_tensor->type == kTfLiteFloat32) {
-      const int num_values = out_tensor->bytes / sizeof(float);
-      output_data.resize(out_idx + num_values);
+      const size_t num_values = out_tensor->bytes / sizeof(float);
       const float* output = m_interpreter->typed_output_tensor<float>(i);
-      for (int j = 0; j < num_values; ++j) {
-        output_data[out_idx++] = output[j];
+      const size_t size_of_output_tensor_i = m_output_shape[i];
+      output_data[i].resize(size_of_output_tensor_i);
+      for (size_t j = 0; j < size_of_output_tensor_i; ++j) {
+        output_data[i][j] = output[j];
       }
     } else {
       std::cerr << "Unsupported output type: " << out_tensor->type
@@ -108,16 +109,7 @@ const std::vector<InferenceResult> TfLiteWrapper::RunInference(
     }
   }
 
-  const auto* result_raw = output_data.data();
-  std::vector<std::vector<float>> results(m_output_shape.size());
-  int offset = 0;
-  for (size_t i = 0; i < m_output_shape.size(); ++i) {
-    const size_t size_of_output_tensor_i = m_output_shape[i];
-    results[i].resize(size_of_output_tensor_i);
-    std::memcpy(results[i].data(), result_raw + offset, sizeof(float) * size_of_output_tensor_i);
-    offset += size_of_output_tensor_i;
-  }
-  return GetResults(results);
+  return GetResults(output_data);
 }
 
 }  // namespace edge

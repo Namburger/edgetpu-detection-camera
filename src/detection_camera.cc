@@ -30,7 +30,8 @@ void DetectionCamera::Run() {
     m_camera.set(cv::CAP_PROP_FPS, 30.0f);
     m_camera.set(cv::CAP_PROP_FRAME_HEIGHT, m_height);
     m_camera.set(cv::CAP_PROP_FRAME_WIDTH, m_width);
-    // In case user gives incorrect parameters, cv will re-adjust, we reset our values to fit cv.
+    // In case user gives incorrect parameters, cv will re-adjust, we reset our
+    // values to fit cv.
     m_height = m_camera.get(cv::CAP_PROP_FRAME_HEIGHT);
     m_width = m_camera.get(cv::CAP_PROP_FRAME_WIDTH);
   }
@@ -60,8 +61,7 @@ void DetectionCamera::Run() {
       const auto& c = "candidate: " + candidate.candidate;
       const auto& s = "score: " + std::to_string(candidate.score);
 
-      cv::rectangle(
-          frame, cv::Point(lft, top), cv::Point(rgt, btm), cvblue, 2, 1, 0);
+      cv::rectangle(frame, cv::Point(lft, top), cv::Point(rgt, btm), cvblue, 2, 1, 0);
       cv::putText(
           frame, c, cv::Point(lft, top - 25), cv::FONT_HERSHEY_COMPLEX, .8, cvred, 1.5, 8, 0);
       cv::putText(
