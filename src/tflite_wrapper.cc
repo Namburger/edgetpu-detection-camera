@@ -1,5 +1,6 @@
 #include "tflite_wrapper.h"
 
+#include <time.h>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -85,6 +86,9 @@ const std::vector<InferenceResult> TfLiteWrapper::GetResults(
 const std::vector<InferenceResult> TfLiteWrapper::RunInference(
     const std::vector<uint8_t>& input_data) {
   std::vector<std::vector<float>> output_data;
+
+  auto start = std::chrono::system_clock::now();
+
   uint8_t* input = m_interpreter->typed_input_tensor<uint8_t>(0);
   std::memcpy(input, input_data.data(), input_data.size());
   m_interpreter->Invoke();
@@ -108,8 +112,14 @@ const std::vector<InferenceResult> TfLiteWrapper::RunInference(
                 << "\n Tensor Name: " << out_tensor->name;
     }
   }
+  m_prev_inference_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::system_clock::now() - start);
 
   return GetResults(output_data);
+}
+
+std::chrono::microseconds TfLiteWrapper::get_prev_duration() const {
+  return m_prev_inference_duration;
 }
 
 }  // namespace edge

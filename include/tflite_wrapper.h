@@ -2,6 +2,7 @@
 #define EDGETPU_TFLITE_CV_TFLITE_WRAPPER_H_
 
 #include <array>
+#include <chrono>
 #include <map>
 #include <string>
 
@@ -38,6 +39,8 @@ public:
   const std::vector<InferenceResult> GetResults(const std::vector<std::vector<float>>& output);
   // Exposes the input tensor shape.
   const std::vector<int> GetInputShape();
+  // Exposes previous inference time.
+  std::chrono::microseconds get_prev_duration() const;
   // Destructor.
   ~TfLiteWrapper() = default;
 
@@ -48,6 +51,7 @@ private:
   std::vector<size_t> m_output_shape;
   std::map<int, std::string> m_labels;
   float m_threshold;
+  std::chrono::microseconds m_prev_inference_duration;
 };
 
 }  // namespace edge

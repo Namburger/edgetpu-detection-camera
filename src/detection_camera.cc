@@ -5,6 +5,8 @@
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/model.h"
 
+#include <chrono>
+
 namespace edge {
 
 DetectionCamera::DetectionCamera(
@@ -36,6 +38,8 @@ void DetectionCamera::Run() {
     m_width = m_camera.get(cv::CAP_PROP_FRAME_WIDTH);
   }
 
+  const auto& cvred = cv::Scalar(0, 0, 255);
+  const auto& cvblue = cv::Scalar(255, 0, 0);
   cv::Mat frame;
   for (;;) {
     m_camera.read(frame);
@@ -51,13 +55,19 @@ void DetectionCamera::Run() {
         resized_frame.data + (resized_frame.cols * resized_frame.rows * resized_frame.elemSize()));
 
     const auto& candidates = m_interpreter.RunInference(input);
+
+    std::cout << "Inference Time: " << m_interpreter.get_prev_duration().count()
+              << " microseconds\n";
+
+    const auto& f = "Inference Rate: "
+                    + std::to_string(1000000 / m_interpreter.get_prev_duration().count()) + " fps";
+    cv::putText(frame, f, cv::Point(0, 20), cv::FONT_HERSHEY_COMPLEX, .8, cvred, 1.5, 8, 0);
+
     for (const auto& candidate : candidates) {
       int top = static_cast<int>(candidate.y1 * m_height + 0.5f);
       int lft = static_cast<int>(candidate.x1 * m_width + 0.5f);
       int btm = static_cast<int>(candidate.y2 * m_height + 0.5f);
       int rgt = static_cast<int>(candidate.x2 * m_width + 0.5f);
-      const auto& cvred = cv::Scalar(0, 0, 255);
-      const auto& cvblue = cv::Scalar(255, 0, 0);
       const auto& c = "candidate: " + candidate.candidate;
       const auto& s = "score: " + std::to_string(candidate.score);
 
