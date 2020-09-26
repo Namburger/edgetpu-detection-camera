@@ -35,11 +35,10 @@ message("System ARCH is ${CMAKE_SYSTEM_PROCESSOR} ${ARCH}")
 include(ExternalProject)
 
 ExternalProject_Add(opencv
-  GIT_REPOSITORY https://github.com/cedricve/opencv
-  GIT_TAG "3.3.0"
+  GIT_REPOSITORY https://github.com/opencv/opencv
+  GIT_TAG "3.4"
   SOURCE_DIR opencv
   BINARY_DIR opencv-build
-  PATCH_COMMAND git apply ${CMAKE_SOURCE_DIR}/scripts/cv.patch
   CMAKE_ARGS
     -DCMAKE_BUILD_TYPE=RELEASE 
     -DFORCE_VTK=ON
